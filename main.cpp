@@ -11,6 +11,12 @@ void test_simple() {
     sm.unlock();
 }
 
+void test_simple_aa() {
+    smart_mutex sm;
+    sm.lock();
+    sm.lock();
+}
+
 void test_simple_ab_ba() {
     smart_mutex sm1;
     smart_mutex sm2;
@@ -66,7 +72,8 @@ int main() {
     test_simple();
     std::cout << "Done" << std::endl;
     std::cout << "Tests that should terminate" << std::endl;
-    test_simple_ab_ba();  // comment out to run the next test
+    test_simple_aa();  // comment out to run the next test
+    test_simple_ab_ba();
     test_simple_ab_bc_ca();
     std::cout << "Testing done" << std::endl;
     return 0;

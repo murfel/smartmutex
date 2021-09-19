@@ -36,9 +36,13 @@ private:
         return has_cycles(SENTINEL_VERTEX, adj_list.begin()->first, visited);
     }
 
+    static void terminate() {
+        exit(1);
+    }
+
     void terminate_if_broken_invariant() {
         if (has_cycles()) {
-            exit(1);
+            terminate();
         }
     }
 
@@ -46,10 +50,19 @@ private:
         auto it = std::find(adj_list[from].begin(), adj_list[from].end(), to);
         adj_list[from].erase(it);
     }
+
+    void add_directed_edge(uint64_t u, uint64_t v) {
+        auto it = std::find(adj_list[u].begin(), adj_list[u].end(), v);
+        if (it == adj_list[u].end()) {
+            adj_list[u].push_back(v);
+        } else {
+            terminate();  // a multiple edge detected
+        }
+    }
 public:
     void add_edge(uint64_t u, uint64_t v) {
-        adj_list[u].push_back(v);
-        adj_list[v].push_back(u);
+        add_directed_edge(u, v);
+        add_directed_edge(v, u);
         terminate_if_broken_invariant();
     }
     void remove_edge(uint64_t u, uint64_t v) {
