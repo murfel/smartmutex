@@ -16,7 +16,7 @@ private:
     std::unordered_map<vertex_t, std::vector<vertex_t>> adj_list;
 
     bool has_cycles(const vertex_t parent, const vertex_t vertex, std::unordered_set<vertex_t> & visited) {
-        if (visited.count(vertex)) {
+        if (visited.count(vertex) == 1) {
             return true;
         }
         visited.insert(vertex);
@@ -33,7 +33,16 @@ private:
 
     bool has_cycles() {
         std::unordered_set<vertex_t> visited;
-        return has_cycles(SENTINEL_VERTEX, adj_list.begin()->first, visited);
+        auto it = adj_list.begin();
+        while (visited.size() != adj_list.size()) {
+            while (visited.count(it->first) == 1) {
+                it++;
+            }
+            if (has_cycles(SENTINEL_VERTEX, it->first, visited)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     static void terminate() {
